@@ -40,7 +40,7 @@ module.exports =
 /******/ 	// the startup function
 /******/ 	function startup() {
 /******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(63);
+/******/ 		return __webpack_require__(650);
 /******/ 	};
 /******/
 /******/ 	// run startup
@@ -49,40 +49,20 @@ module.exports =
 /************************************************************************/
 /******/ ({
 
-/***/ 63:
+/***/ 650:
 /***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
 
 const core = __webpack_require__(898);
-const github = __webpack_require__(654);
 
-async function run() {
-  try {
-    const issueTitle = core.getInput("issue-title");
-    const jokeBody = core.getInput("joke");
-    const token = core.getInput("repo-token");
+const firstGreeting = core.getInput("first-greeting");
+const secondGreeting = core.getInput("second-greeting");
+const thirdGreeting = core.getInput("third-greeting");
 
-    const octokit = github.getOctokit(token);
-
-    const newIssue = await octokit.issues.create({
-        repo: github.context.repo.repo,
-        owner: github.context.repo.owner,
-        title: issueTitle,
-        body: jokeBody
-    });
-  } catch (err) {
-      core.setFailed(err.message);
-  }
+console.log(`Hello ${firstGreeting}`);
+console.log(`Hello ${secondGreeting}`);
+if (thirdGreeting) {
+  console.log(`Hello ${thirdGreeting}`);
 }
-
-run()
-
-/***/ }),
-
-/***/ 654:
-/***/ (function(module) {
-
-module.exports = eval("require")("@actions/github");
-
 
 /***/ }),
 

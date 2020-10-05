@@ -40,7 +40,7 @@ module.exports =
 /******/ 	// the startup function
 /******/ 	function startup() {
 /******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(63);
+/******/ 		return __webpack_require__(650);
 /******/ 	};
 /******/
 /******/ 	// run startup
@@ -49,40 +49,52 @@ module.exports =
 /************************************************************************/
 /******/ ({
 
-/***/ 63:
-/***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
+/***/ 40:
+/***/ (function(module) {
 
-const core = __webpack_require__(898);
-const github = __webpack_require__(654);
+module.exports = eval("require")("request-promise");
 
-async function run() {
-  try {
-    const issueTitle = core.getInput("issue-title");
-    const jokeBody = core.getInput("joke");
-    const token = core.getInput("repo-token");
-
-    const octokit = github.getOctokit(token);
-
-    const newIssue = await octokit.issues.create({
-        repo: github.context.repo.repo,
-        owner: github.context.repo.owner,
-        title: issueTitle,
-        body: jokeBody
-    });
-  } catch (err) {
-      core.setFailed(err.message);
-  }
-}
-
-run()
 
 /***/ }),
 
-/***/ 654:
-/***/ (function(module) {
+/***/ 454:
+/***/ (function(module, __unusedexports, __webpack_require__) {
 
-module.exports = eval("require")("@actions/github");
+const request = __webpack_require__(40);
 
+const options = {
+  method: "GET",
+  uri: "https://icanhazdadjoke.com/",
+  headers: {
+    Accept: "application/json",
+    "User-Agent":
+      "Writing JavaScript action GitHub Learning Lab course.  Visit lab.github.com or to contact us."
+  },
+  json: true
+};
+
+async function getJoke() {
+  const res = await request(options);
+  return res.joke;
+}
+
+module.exports = getJoke;
+
+/***/ }),
+
+/***/ 650:
+/***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
+
+const getJoke = __webpack_require__(454);
+const core = __webpack_require__(898);
+
+async function run() {
+  const joke = await getJoke();
+  console.log(joke);
+  core.setOutput("joke-output", joke);
+}
+
+run();
 
 /***/ }),
 
